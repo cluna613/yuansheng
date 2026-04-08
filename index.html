@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>测测你的原生家庭如何影响恋爱模式</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f4f0e8;
+            --text-color: #2c2c2c;
+            --accent-color: #8c3a3a; 
+            --border-color: #1a1a1a;
+        }
+
+        body {
+            font-family: 'Noto Serif SC', serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            background-image: url('https://www.transparenttextures.com/patterns/stardust.png'); 
+        }
+
+        .film-container {
+            max-width: 500px;
+            margin: 0 auto;
+            min-height: 100vh;
+            border-left: 18px solid var(--border-color);
+            border-right: 18px solid var(--border-color);
+            position: relative;
+            background: var(--bg-color);
+            padding: 40px 24px;
+            box-shadow: 0 0 40px rgba(0,0,0,0.15);
+        }
+
+        .film-container::before, .film-container::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 10px;
+            background-image: radial-gradient(circle, #fff 4px, transparent 5px);
+            background-size: 10px 40px;
+            background-position: center;
+            opacity: 0.2;
+            z-index: 10;
+        }
+        .film-container::before { left: -14px; }
+        .film-container::after { right: -14px; }
+
+        .screen { display: none; animation: slideUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); }
+        .active { display: block; }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .btn-retro {
+            border: 1px solid var(--text-color);
+            padding: 14px 28px;
+            transition: all 0.3s;
+            background: transparent;
+            cursor: pointer;
+            display: inline-block;
+            letter-spacing: 2px;
+            font-weight: bold;
+        }
+
+        .btn-retro:hover {
+            background: var(--text-color);
+            color: var(--bg-color);
+            transform: scale(1.02);
+        }
+
+        .option-card {
+            border: 1px solid #d1ccc0;
+            padding: 18px;
+            margin-bottom: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: rgba(255,255,255,0.4);
+            line-height: 1.6;
+        }
+
+        .option-card:hover {
+            border-color: var(--accent-color);
+            background: #fff;
+            transform: translateX(8px);
+            box-shadow: -4px 4px 0 var(--accent-color);
+        }
+
+        .progress-bar {
+            height: 1px;
+            background: #d1ccc0;
+            width: 100%;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .progress-inner {
+            height: 3px;
+            background: var(--accent-color);
+            width: 0%;
+            transition: width 0.4s;
+            position: absolute;
+            top: -1px;
+        }
+
+        .result-title {
+            font-size: 1.8rem;
+            color: var(--accent-color);
+            margin-bottom: 1.5rem;
+            text-align: center;
+            border-bottom: 1px double var(--accent-color);
+            padding-bottom: 10px;
+        }
+
+        .result-content {
+            font-size: 0.95rem;
+            line-height: 1.9;
+            text-align: justify;
+            color: #333;
+            margin-bottom: 2rem;
+            white-space: pre-line;
+        }
+
+        .prescription-box {
+            background: rgba(140, 58, 58, 0.05);
+            border: 1px dashed var(--accent-color);
+            padding: 20px;
+            margin-top: 30px;
+            position: relative;
+        }
+
+        .prescription-box::before {
+            content: "Rx";
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            background: var(--bg-color);
+            padding: 0 10px;
+            color: var(--accent-color);
+            font-weight: bold;
+            font-style: italic;
+        }
+
+        @media (max-width: 640px) {
+            .film-container { border-left-width: 12px; border-right-width: 12px; }
+            .film-container::before { left: -11px; }
+            .film-container::after { right: -11px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="film-container">
+    <div id="welcome-screen" class="screen active text-center">
+        <p class="text-xs tracking-[0.3em] mb-6 opacity-50">ARCHIVE OF SOUL / 潜意识档案</p>
+        <h1 class="text-2xl font-bold mb-10 leading-tight"><br><span class="text-red-800 text-3xl">测测你的原生家庭<br>如何影响恋爱模式</span></h1>
+        <div class="mb-12">
+            <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&q=80&w=500" class="grayscale sepia brightness-90 rounded-sm shadow-xl" alt="vintage film">
+        </div>
+        <p class="text-sm leading-8 mb-10 px-4 opacity-80">
+            那些突如其来的强烈心动，<br>究竟是灵魂的共鸣，还是童年脚本的重演？<br>让我们在显影液中，看清爱里的隐形巨手。
+        </p>
+        <button class="btn-retro" onclick="startQuiz()">开启显影过程</button>
+    </div>
+
+    <div id="quiz-screen" class="screen">
+        <div class="progress-bar"><div id="progress" class="progress-inner"></div></div>
+        <p id="question-number" class="text-xs mb-3 tracking-widest opacity-40">FRAGMENT NO.01</p>
+        <h2 id="question-text" class="text-xl mb-10 leading-relaxed font-bold"></h2>
+        <div id="options-container"></div>
+    </div>
+
+    <div id="loading-screen" class="screen text-center pt-32">
+        <div class="inline-block w-12 h-12 border-2 border-red-800 border-t-transparent rounded-full animate-spin mb-6"></div>
+        <p class="tracking-[0.5em] text-xs animate-pulse">正在冲洗底片...</p>
+        <p class="text-[10px] mt-4 opacity-30 italic">Developing the subconscious memories...</p>
+    </div>
+
+    <div id="result-screen" class="screen">
+        <p class="text-xs opacity-40 mb-6 text-center tracking-[0.2em]">IDENTIFICATION REPORT / 最终鉴定报告</p>
+        <div id="res-keyword" class="result-title"></div>
+        <div id="res-desc" class="result-content"></div>
+        <div class="prescription-box">
+            <p class="font-bold text-sm mb-3">【恋爱处方】</p>
+            <div id="res-rx" class="text-sm leading-relaxed opacity-90"></div>
+        </div>
+        <button class="btn-retro w-full mt-12 mb-8" onclick="location.reload()">重新显影</button>
+    </div>
+</div>
+
+<script>
+    const questions = [
+        { q: "在热闹的社交场合，你的目光最容易被哪种人吸引？", options: [
+            { t: "举止大方、照顾每个人感受的“发光体”", val: "secure" },
+            { t: "坐在角落、神色带着一丝忧郁的“旁观者”", val: "avoidant" },
+            { t: "谈吐锐利、充满野心与掌控感的“引领者”", val: "anxious" },
+            { t: "那个看起来非常需要陪伴或帮助的“受挫者”", val: "saver" }
+        ]},
+        { q: "如果回到童年，当你打破了一个昂贵的碗，父母的第一反应是：", options: [
+            { t: "询问你有没有受伤，然后一起清理", val: "secure" },
+            { t: "沉默和叹息，那种无声的压抑令你窒息", val: "avoidant" },
+            { t: "一顿劈头盖脸的责骂，强调你的粗心", val: "fearful" },
+            { t: "这种事几乎不发生，因为你总是完美避开错误", val: "pleaser" }
+        ]},
+        { q: "初次约会时，对方提前半小时到达并安排好了一切，你的感受是：", options: [
+            { t: "感到轻松，被这种被照顾的秩序感治愈", val: "secure" },
+            { t: "感到压力，觉得对方可能控制欲较强", val: "avoidant" },
+            { t: "感到不安，下意识想做点什么来弥补对方", val: "pleaser" },
+            { t: "感到怀疑，认为这只是一种伪装", val: "fearful" }
+        ]},
+        { q: "你最无法忍受伴侣在哪种情绪状态下与你相处？", options: [
+            { t: "无止境的负能量抱怨", val: "saver" },
+            { t: "冰冷的冷暴力与忽视", val: "anxious" },
+            { t: "极度强烈的情绪爆发", val: "fearful" },
+            { t: "像没事人一样粉饰太平", val: "avoidant" }
+        ]},
+        { q: "关于“承诺”，你的第一直觉更接近：", options: [
+            { t: "婚姻和誓言是神圣且值得追求的", val: "secure" },
+            { t: "承诺不过是即兴发挥，随时可能过期", val: "avoidant" },
+            { t: "我很想相信，但我总在等它碎掉的那一刻", val: "anxious" },
+            { t: "承诺是一种沉重的束缚，让我想要逃离", val: "fearful" }
+        ]},
+        { q: "在亲密关系中，如果对方夸奖你“你真的很懂事”，你会：", options: [
+            { t: "感到开心，认为自己的付出被看到了", val: "secure" },
+            { t: "感到鼻酸，觉得这其实是一种求生的本能", val: "pleaser" },
+            { t: "感到警惕，担心对方之后会要求更多", val: "fearful" },
+            { t: "没什么感觉，这是我习惯的角色", val: "avoidant" }
+        ]},
+        { q: "当对方突然断联几小时，你的大脑会自动生成哪种剧本？", options: [
+            { t: "他在忙，等下会回我的", val: "secure" },
+            { t: "我是不是说错了什么？他是不是厌烦我了？", val: "anxious" },
+            { t: "他可能出事了！（极度担心的灾难化思维）", val: "fearful" },
+            { t: "正好，我也需要一点个人空间", val: "avoidant" }
+        ]},
+        { q: "关于金钱，原生家庭给你的潜意识打下的烙印是：", options: [
+            { t: "金钱是安全的保障，可以自由谈论", val: "secure" },
+            { t: "谈钱伤感情，是一种羞耻", val: "pleaser" },
+            { t: "必须掌握经济主动权，否则会被抛弃", val: "anxious" },
+            { t: "它是父母用来控制我的工具", val: "fearful" }
+        ]},
+        { q: "你发现自己反复被哪种类型的恋人吸引？", options: [
+            { t: "情绪不稳定、需要我不断安抚的人", val: "saver" },
+            { t: "像冰山一样、无法建立联结的人", val: "avoidant" },
+            { t: "强势、总是在指责我的人", val: "fearful" },
+            { t: "温柔、情绪稳定的人", val: "secure" }
+        ]},
+        { q: "小时候，如果你生病了，父母通常的表现是：", options: [
+            { t: "温柔悉心地照料，推掉工作陪你", val: "secure" },
+            { t: "一边照顾一边埋怨你“净添麻烦”", val: "pleaser" },
+            { t: "给你钱或药，让你自己解决", val: "avoidant" },
+            { t: "表现得比你还惊慌，反而需要你去安慰", val: "anxious" }
+        ]},
+        { q: "当你的伴侣试图深入了解你的过去，你会：", options: [
+            { t: "坦诚相告，认为这是拉近距离的机会", val: "secure" },
+            { t: "简略带过，觉得那些事没什么好说的", val: "avoidant" },
+            { t: "感到被侵犯，想保护最后的隐私", val: "fearful" },
+            { t: "编织一些更完美的叙事来粉饰", val: "pleaser" }
+        ]},
+        { q: "面对冲突，你内心的潜台词通常是：", options: [
+            { t: "“我们把问题讲清楚吧。”", val: "secure" },
+            { t: "“只要我道歉/让步，一切就会过去。”", val: "pleaser" },
+            { t: "“你果然不爱我，才会这样对我。”", val: "anxious" },
+            { t: "“随便吧，反正在一起也没意思。”", val: "avoidant" }
+        ]},
+        { q: "如果让你用一个物件形容“童年的家”，你会选：", options: [
+            { t: "暖黄色的台灯", val: "secure" },
+            { t: "充满裂纹的瓷器", val: "fearful" },
+            { t: "必须时刻擦拭的奖杯", val: "pleaser" },
+            { t: "一扇关不上的窗户", val: "avoidant" }
+        ]},
+        { q: "在感情里，最性感的瞬间是：", options: [
+            { t: "深夜里平静且有深度的长谈", val: "secure" },
+            { t: "对方展现出对你的极致占有欲", val: "anxious" },
+            { t: "两个人各做各的事，互不干扰", val: "avoidant" },
+            { t: "在你最狼狈时，对方没有离开抱紧你", val: "fearful" }
+        ]},
+        { q: "你认为“心动信号”的本质是：", options: [
+            { t: "两个成熟灵魂的共振", val: "secure" },
+            { t: "寻找失落已久的另一半拼图", val: "anxious" },
+            { t: "一种宿命式的轮回", val: "fearful" },
+            { t: "基因编织的陷阱", val: "avoidant" }
+        ]}
+    ];
+
+    const results = {
+        secure: {
+            k: "恒温守望者",
+            d: `你的内心拥有一片波澜不惊的深海，那是童年时期父母给予的“心理安全基地”所留下的回声。在你的潜意识里，爱不是一种稀缺资源，而是一种可以流动的能量。你对他人的心动信号，通常源于一种“健康的共鸣”——你会被那些同样稳定、自洽且真诚的灵魂吸引。你不需要通过极端的冲突来确认对方在意你，也不需要通过卑微的顺从来换取和平。\n\n对你而言，亲密关系是一场“强强联手”的探险，而非两个残缺个体的缝补。这种松弛感让你在面对矛盾时，具备极高的心理韧性。你不会轻易地将对方的负面情绪解读为对自己的攻击，也不会在被爱时感到受宠若惊。你深知自己值得被爱，这种底气让你在爱中既能深情投入，又能保持独立的自我。你的人生脚本中，恋爱是锦上添花的点缀，你寻找的是那个能和你一起看风景的人，而非一个救赎者。你的爱像冬日的壁炉，稳定、持久且温厚。`,
+            rx: "1. 警惕“平淡”陷阱：因为你习惯了稳定，有时会误将健康的平静视为乏味。试着与伴侣一起创造“共同的巅峰体验”。\n2. 照顾伴侣的阴影：你可能难以完全理解不安全感较强的伴侣，请保持耐心，用你的“恒温”去慢慢修补他们的裂痕。"
+        },
+        avoidant: {
+            k: "孤岛漫游者",
+            d: `你像是一座在极夜中独自漂流的冰山，壮丽却拒绝被靠近。在原生家庭的叙事里，你可能过早地学会了“懂事”和“情感自足”。或许是曾经的求助被忽视，或者是过度的控制让你感到窒息，你潜意识里将“亲密”与“危险”划上了等号。你的心动信号往往在“安全距离”内最强烈——你会被那些优秀、克制、带有一丝疏离感的人吸引，因为他们不会立刻打破你的防御机制。\n\n一旦关系进入需要深度联结的阶段，你体内的警报器就会轰鸣。你会通过挑剔对方的缺点、故意冷淡或者沉溺于工作来拉开距离。你内心的那个小孩在窃窃私语：“只要我不抱期待，我就不会失望。”你用理智构筑了一座精美绝伦的围城，将所有的脆弱都锁在最深处。你习惯于在一段感情快要失控时，主动按下暂停键。你的孤独是一种勋章，也是一种诅咒，你在人群中渴望被理解，却在有人试图走进你的灵魂时感到汗毛直立。`,
+            rx: "1. 练习“脆弱练习”：尝试每周向伴侣分享一件你感到羞耻或脆弱的小事。暴露弱点是建立深层联结的唯一路径。\n2. 识别“退行信号”：当你想要逃离时，停下来问问自己：“我是在逃避那个人，还是在逃避那种失控的感觉？”"
+        },
+        anxious: {
+            k: "燃灯寻觅者",
+            d: `你在爱里像是一个永恒的守夜人，不断划燃火柴去确认对方的存在。由于童年得到的情感是“间歇性强化”的，你形成了极其灵敏的情感雷达。你对他人的心动信号往往是一种“饥渴的捕捉”，你会被那些能提供强烈情绪价值、甚至带有一点掌控欲的人吸引。在你的逻辑里，强烈的波动才等同于强烈的爱。\n\n恋爱后的你，心智会被一种名为“饥饿”的情绪占据。你会反复推敲对方的每一个标点符号，对已读不回有着近乎生理性的焦虑。你通过过度付出、时刻粘人来换取短暂的安全感，却又在对方稍微疏忽时陷入剧烈的崩塌。你其实不是在谈恋爱，而是在寻找那个能永远接住你、不离开你的支点。你将自我的价值完全建立在他人的评价之上。你内心深处始终盘旋着一个疑问：如果我不够努力，他还会留下来吗？`,
+            rx: "1. 建立“自愈岛屿”：培养至少一个不需要伴侣参与、能让你获得成就感的硬核爱好。找回你的“自我中心”。\n2. 延时反应练习：在焦虑发作想要疯狂轰炸消息时，强制等待20分钟，练习通过自我对话来安抚那个受惊的小孩。"
+        },
+        fearful: {
+            k: "琉璃防御者",
+            d: `你拥有一种令人心碎的矛盾感，像是一件精美却布满裂纹的琉璃，渴望被紧密相拥，却又在被靠近时感到灼伤。原生家庭可能曾是你恐惧的来源。这导致你对他人的心动信号充满了“悲剧色彩”：你往往会被那些迷人但危险、甚至能带给你伤害的人吸引。这种熟悉的痛感，会让你产生一种“这就是宿命”的错觉。\n\n你在恋爱中是一个极端的矛盾体：你极度渴望依恋，却又在亲密感提升时感到灭顶的威胁。上一秒你还沉浸在温柔中，下一秒就可能因为一个莫须有的怀疑而想要推开一切。你就像一个在沙漠中渴极了的人，好不容易找到了水源，却因为害怕水里有毒而迟迟不敢饮用。这种内耗让你在每一场恋爱中都像是在经历一场战争，你不仅在和对方博弈，更是在和自己破碎的防御系统交火。`,
+            rx: "1. 寻找“高一致性”伴侣：你需要一个行为极度可预测、能提供百分之百透明度的伴侣。避开那些忽冷忽热的“玩家”。\n2. 专业疗愈：你的模式往往涉及深层的创伤，建议结合心理咨询，在安全的环境下重新建立对“安全感”的认知。"
+        },
+        saver: {
+            k: "圣杯拯救者",
+            d: `你的心动信号极其特殊且带有神性色彩：你几乎不被“完整的人”吸引，你总是精准地捕捉到那些“破碎的灵魂”。在童年，你可能扮演了家庭中的“情绪调解员”，习惯了通过解决他人的痛苦来确认自己的价值。你潜意识里认为：只有当我对他有用时，我才是安全的、被需要的。\n\n在恋爱中，你往往在扮演“全能母亲”或“救世英雄”的角色。你试图修补对方的童年，替对方解决危机。然而，这种基于“怜悯”和“修补”的爱是极其危险的。当你将对方修补好之后，你往往会感到一种莫名的失落。你其实是在通过拯救别人，来试图拯救当年那个面对父母矛盾却无能为力的自己。你真正的心动信号，其实是某种“求救信号”的回响。`,
+            rx: "1. 停止“扶贫式恋爱”：下次心动时问自己：“如果没有这些困难，我还会被这个人吸引吗？”\n2. 练习“被服务”：允许伴侣为你付出，练习心安理得地接受照顾，而不是立刻想方设法“还回去”。"
+        },
+        pleaser: {
+            k: "幕布隐匿者",
+            d: `你是一个情感的调色盘，为了不引起冲突，你习惯于将自己调成对方喜欢的颜色。你的心动信号往往源于“被选中的喜悦”——只要有人对你展现出强烈的偏爱，你就会迅速调整自己的频率去适配对方。在原生家庭中，你的存在感往往依赖于“表现良好”和“听话”，这种顺从已经内化成了你的人格底色。\n\n在恋爱里，你最怕空气突然静止。你会为了迎合对方的胃口、爱好甚至价值观而不断切割真实的自我。久而久之，你成为了伴侣最完美的镜像，却在某个深夜感到一种剧烈的虚无感：在这一段关系里，我到底在哪里？你总是在推测对方的需求并先行满足，这种过度补偿让对方感到窒息，也让你感到自我的枯竭。你的课题是找回那个被你藏起来的、真实而有棱角的自我。`,
+            rx: "1. 建立“愤怒清单”：每天记录一件令你不爽的小事，并练习用中性的语言表达出来。愤怒是找回自我边界的最好工具。\n2. 拒绝“读心术”：停止猜测对方想要什么，强迫自己等对方明确表达需求后再行动。"
+        }
+    };
+
+    let currentStep = 0;
+    let scores = {};
+
+    function startQuiz() {
+        showScreen('quiz-screen');
+        showQuestion();
+    }
+
+    function showQuestion() {
+        const q = questions[currentStep];
+        document.getElementById('question-number').innerText = `FRAGMENT NO.${String(currentStep + 1).padStart(2, '0')}`;
+        document.getElementById('question-text').innerText = q.q;
+        const container = document.getElementById('options-container');
+        container.innerHTML = '';
+        q.options.forEach(opt => {
+            const div = document.createElement('div');
+            div.className = 'option-card';
+            div.innerText = opt.t;
+            div.onclick = () => selectOption(opt.val);
+            container.appendChild(div);
+        });
+        document.getElementById('progress').style.width = `${((currentStep) / questions.length) * 100}%`;
+    }
+
+    function selectOption(val) {
+        scores[val] = (scores[val] || 0) + 1;
+        if (currentStep < questions.length - 1) {
+            currentStep++;
+            showQuestion();
+        } else {
+            showLoading();
+        }
+    }
+
+    function showLoading() {
+        showScreen('loading-screen');
+        setTimeout(showResult, 2600);
+    }
+
+    function showResult() {
+        const topResult = Object.keys(scores).reduce((a, b) => scores[a] > scores[b] ? a : b);
+        const res = results[topResult];
+        
+        document.getElementById('res-keyword').innerText = res.k;
+        document.getElementById('res-desc').innerText = res.d;
+        document.getElementById('res-rx').innerText = res.rx;
+        showScreen('result-screen');
+    }
+
+    function showScreen(id) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        window.scrollTo(0, 0);
+    }
+</script>
+
+</body>
+</html>
